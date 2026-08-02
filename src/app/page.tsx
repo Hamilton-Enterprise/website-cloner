@@ -4,7 +4,6 @@ import { listRecentStores } from "@/lib/store-repo";
 import { HeroGenerateForm } from "@/components/hero-generate-form";
 import { StoreGalleryCard } from "@/components/store-gallery-card";
 import Aurora from "@/components/react-bits/Aurora";
-import BlurText from "@/components/react-bits/BlurText";
 import { Button } from "@/components/ui/button";
 
 export default async function Home() {
@@ -29,12 +28,7 @@ export default async function Home() {
           >
             Lojas geradas
           </a>
-          <Button
-            render={<a href="#gerar" />}
-            nativeButton={false}
-            size="sm"
-            className="rounded-full"
-          >
+          <Button render={<a href="#gerar" />} nativeButton={false} size="sm">
             Começar grátis
           </Button>
         </div>
@@ -49,11 +43,8 @@ export default async function Home() {
           <Aurora colorStops={["#c4794a", "#8a5a3a", "#241f1a"]} amplitude={0.8} blend={0.6} speed={0.4} />
         </div>
         <div className="relative mx-auto flex max-w-2xl flex-col items-center gap-8 text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 text-xs text-muted-foreground">
-            <Sparkles className="size-3.5" /> Acesso antecipado — em construção
-          </span>
-          <h1 className="font-[family-name:var(--font-heading)] text-5xl leading-[1.05] font-normal text-foreground sm:text-6xl">
-            <BlurText text="A tua loja nasce de uma frase." delay={60} animateBy="words" />
+          <h1 className="text-display-xl text-foreground">
+            A tua loja nasce de uma frase.
           </h1>
           <p className="text-lg text-muted-foreground">
             Escreve o que queres vender. A Ember gera a marca, os produtos e
@@ -62,8 +53,9 @@ export default async function Home() {
           <div className="w-full max-w-xl">
             <HeroGenerateForm />
           </div>
-          <p className="text-xs text-muted-foreground/70">
-            Geração real por IA. Sem processamento de pagamentos nesta fase — ver{" "}
+          <p className="flex items-center gap-1.5 text-xs text-muted-foreground/70">
+            <Sparkles className="size-3.5" /> Acesso antecipado, geração real
+            por IA. Sem processamento de pagamentos nesta fase — ver{" "}
             <a href="#roteiro" className="underline underline-offset-4">
               o que ainda falta
             </a>
@@ -75,7 +67,7 @@ export default async function Home() {
       {/* Galeria — prova social honesta: lojas reais geradas por quem visitou, não números inventados. */}
       <section id="lojas" className="border-b border-border px-6 py-20 sm:px-10">
         <div className="mx-auto max-w-5xl">
-          <h2 className="mb-2 font-[family-name:var(--font-heading)] text-3xl text-foreground">
+          <h2 className="text-display-lg mb-2 text-foreground">
             Lojas geradas agora mesmo
           </h2>
           <p className="mb-8 text-muted-foreground">
@@ -103,7 +95,7 @@ export default async function Home() {
       {/* Como funciona — três passos reais, não seis funcionalidades por construir. */}
       <section id="como-funciona" className="border-b border-border px-6 py-20 sm:px-10">
         <div className="mx-auto max-w-3xl">
-          <h2 className="mb-10 font-[family-name:var(--font-heading)] text-3xl text-foreground">
+          <h2 className="text-display-lg mb-10 text-foreground">
             Como funciona, a sério
           </h2>
           <ol className="flex flex-col gap-8">
@@ -143,7 +135,7 @@ export default async function Home() {
       {/* Roteiro honesto — o que ainda NÃO existe, dito de frente. */}
       <section id="roteiro" className="border-b border-border px-6 py-20 sm:px-10">
         <div className="mx-auto max-w-3xl">
-          <h2 className="mb-2 font-[family-name:var(--font-heading)] text-3xl text-foreground">
+          <h2 className="text-display-lg mb-2 text-foreground">
             O que ainda estamos a construir
           </h2>
           <p className="mb-8 text-muted-foreground">
@@ -173,7 +165,7 @@ export default async function Home() {
       {/* CTA de fecho — a única faixa inteiramente na cor de marca. */}
       <section className="bg-primary px-6 py-20 text-primary-foreground sm:px-10">
         <div className="mx-auto flex max-w-2xl flex-col items-center gap-6 text-center">
-          <h2 className="font-[family-name:var(--font-heading)] text-3xl sm:text-4xl">
+          <h2 className="text-display-lg">
             Escreve uma frase. Vê a tua loja nascer.
           </h2>
           <Button
@@ -181,7 +173,7 @@ export default async function Home() {
             nativeButton={false}
             size="lg"
             variant="secondary"
-            className="rounded-full bg-primary-foreground px-8 text-primary hover:bg-primary-foreground/90"
+            className="bg-primary-foreground px-8 text-primary hover:bg-primary-foreground/90"
           >
             Experimentar agora
           </Button>
