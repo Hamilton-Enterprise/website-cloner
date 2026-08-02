@@ -63,20 +63,26 @@ Deliberadamente **não** usamos azul-petróleo nem laranja — são as cores do 
 
 - Revelação ao scroll: fade + subida de 12px, uma vez, sem repetir ao voltar a passar — discreto, nunca a carrossel automático a tocar sozinho (o próprio Amboras abusa disto; ver `RECONNAISSANCE.md`, secções 4 e 7).
 - Hover: só mudança de cor/borda, sem escala nem "bounce". Duração 150–200ms, `ease-out`.
-- Um único momento de assinatura: o fundo generativo da hero (shader React Bits) anima de forma contínua e lenta — é o único elemento com movimento perpétuo na página.
+- Um único momento de assinatura, tal como construído: o fundo `Aurora` (React Bits, recolorido a cobre em `src/components/react-bits/Aurora.tsx`) anima de forma contínua e lenta atrás da hero — é o único elemento com movimento perpétuo na página.
+- O H1 da hero é texto estático, sem animação de entrada. A intenção original previa uma animação de texto discreta (`Blur Text`) no H1; foi removida deste build porque `BlurText` fica preso num `IntersectionObserver` (props `threshold`/`rootMargin`) que não dispara a tempo do primeiro paint acima da dobra, produzindo H1 invisível — bug real, corrigido pelo revisor `impeccable-finish-reviewer`. `BlurText` continua instalado em `src/components/react-bits/BlurText.tsx` para uso futuro nalgum elemento que não seja crítico above-the-fold, onde esperar pelo IntersectionObserver não é um problema — não usar em H1 de hero nem noutro elemento de primeiro paint.
 - Nunca mais do que uma secção com carrossel automático por página.
 
 ## Componentes
 
-Só os que a landing page usa:
+Só os que a landing page usa (`src/app/page.tsx`, `src/components/hero-generate-form.tsx`, `src/components/store-gallery-card.tsx`):
 
-- **nav** — fixa, fundo `--background`, wordmark + 3–4 links + CTA `--primary` pill.
-- **hero** — H1 `display-xl` em Fraunces, subtítulo `body-lg`, CTA pill, fundo React Bits (recomendado: `Aurora` ou `Grainient` com a paleta acima — quente, não azul/roxo por defeito da lib, ajustar a prop de cor para o cobre).
-- **feature-card** — `--card`, `rounded-lg`, título `title`, corpo `body`. Grelha 3-up desktop / 1-up mobile. Sem ícone-em-pílula-a-apontar (anti-padrão `04`).
-- **pricing-card** + **pricing-card-featured** — como o Linear: featured sobe um degrau na escada de superfície, não muda de cor.
-- **cta-band** — uma só, perto do fecho, fundo `--primary` sólido, texto `--primary-foreground`.
-- **footer** — `--background`, grelha de colunas de links, texto `muted-foreground`.
-- Extractos React Bits recomendados para diferenciação visual (via MCP shadcn, ver `reactbits.dev/get-started/mcp`): um fundo shader para a hero (uso único), uma animação de texto discreta no H1 (ex. `Blur Text` ou `Shiny Text`, nunca as duas ao mesmo tempo) — não instalar mais do que 2–3 componentes React Bits nesta fase; excesso de animação é o mesmo erro que os "growth sites" genéricos, só que com mais tecnologia por trás.
+- **Escala de display real** (`src/app/globals.css`, `@layer components`), Fraunces (`var(--font-heading)`) em todos os três — fluida por `clamp()`, resolve ao valor de desktop da tabela em Tipografia:
+  - `.text-display-xl` — peso 380, `line-height` 1.02, `letter-spacing` -1px, `font-size: clamp(2.75rem, 5vw + 1.5rem, 5rem)` (resolve a 80px em desktop). H1 da hero.
+  - `.text-display-lg` — peso 400, `line-height` 1.08, `letter-spacing` -0.5px, `font-size: clamp(2rem, 3vw + 1.25rem, 3.5rem)` (resolve a 56px). Abertura de secção.
+  - `.text-display-md` — peso 450, `line-height` 1.15, `letter-spacing` -0.2px, `font-size: clamp(1.5rem, 1.5vw + 1.25rem, 2.25rem)` (resolve a 36px). Título de cartão, preço.
+- **nav** — fixa, fundo `--background/80` com `backdrop-blur`, wordmark + 2 links + CTA. CTA da nav usa o `Button` por defeito (`rounded-lg`, não pill) — confirmado no código (`src/app/page.tsx`), consistente com a regra "pílula só no CTA principal da hero".
+- **hero** — H1 `.text-display-xl` em Fraunces, estático (ver Movimento), subtítulo `body-lg`, fundo `Aurora` (React Bits, cores `["#c4794a", "#8a5a3a", "#241f1a"]`, opacidade 40% sobre o canvas). CTA do formulário (`hero-generate-form.tsx`) é o único botão `rounded-full` (pílula) de toda a página — verificado pelo revisor `impeccable-finish-reviewer`, disposition "ship".
+- **hero-generate-form** — campo de texto + botão pill dentro de um `card` translúcido (`bg-card/80`, `backdrop-blur-sm`, `rounded-lg`, borda `--border`). Único ponto de entrada do fluxo de geração.
+- **store-gallery-card** — grelha 3-up desktop / 1-up mobile de lojas reais geradas, sem números nem logótipos inventados.
+- **como-funciona (passo numerado)** — círculo `rounded-full` numerado + ícone + `title` + `body`, sem cartão-com-sombra.
+- **roteiro (lista honesta)** — item com borda tracejada (`border-dashed`) e etiqueta "em construção", nunca escondido.
+- **cta-band** — uma só, perto do fecho, fundo `--primary` sólido, texto `--primary-foreground`, botão de fecho em `rounded-lg` (não pill) — reforça que a pílula é assinatura exclusiva do CTA da hero.
+- **footer** — `--background`, wordmark + texto + link, `muted-foreground`.
 
 ## Proibido
 
@@ -99,8 +105,10 @@ Só os que a landing page usa:
 
 **Fonte B (`WORKSPACE/REFERENCIAS-VISUAIS/`):** biblioteca redigida para a Elo Blue — usei os princípios gerais (tipografia editorial de grande escala, fundos nocturnos com composição de produto, retrato humano honesto, e sobretudo a lista de anti-referências) e **não** o motivo específico "elo" (`12-sculptural-elo-principle`), que é um activo de marca da Elo Blue, não transferível. Imagens vistas directamente: `01`, `02`, `03`, `06` (aprovadas) e `04`, `05`, `08`, `18` (a evitar) — as quatro "a evitar" foram as mais decisivas: definem com muita clareza o género "site de agência genérico" que este projecto tem de escapar activamente, porque a categoria (plataforma SaaS de e-commerce) é exactamente onde esse cliché mais aparece.
 
-**Ferramenta de implementação (não é decisão de fonte A/B, é recurso técnico):** React Bits (reactbits.dev) disponibiliza os fundos generativos e animações de texto recomendados acima, instalável via MCP do shadcn já compatível com este scaffold Next.js.
+**Ferramenta de implementação (não é decisão de fonte A/B, é recurso técnico):** React Bits (reactbits.dev) disponibiliza os fundos generativos e animações de texto recomendados acima, instalável via MCP do shadcn já compatível com este scaffold Next.js. **Actualização pós-build (2026-08-02, verificado no código, não na intenção original):** de dois componentes React Bits previstos (fundo shader + animação de texto no H1), só o fundo (`Aurora`) sobreviveu ao build. `BlurText` foi instalado e depois retirado do H1 por causar um bug real de visibilidade (H1 preso à espera de um `IntersectionObserver` que não disparava a tempo do primeiro paint) — ver Movimento. Fica registado como recurso técnico disponível, não como componente do sistema activo nesta página.
 
 ---
 
 Ficou decidido: canvas escuro quente + cobre único + Fraunces/Inter como assinatura tipográfica, com uma lista de vetos muito concreta contra o cliché de "site de agência". As fontes A e B concordaram sem tensão real — a única divergência foi decidir não seguir o Shopify ao pormenor (a fonte A oferecia-o como vocabulário de categoria, mas segui-lo custaria a distinção que o Hamilton pediu). Por decidir, à espera do Hamilton: se a app do produto (dashboard do lojista, não a marketing) deve herdar este canvas escuro ou passar a claro para densidade de trabalho — isso não estava no âmbito desta peça.
+
+Actualização pós-revisão final (impeccable-finish-reviewer, disposition "ship"): H1 visível desde o primeiro paint, escala de display resolvida a valores reais em `globals.css`, uso de pílula confinado ao CTA principal da hero (confirmado em nav, hero-generate-form e cta-band), badge flutuante removido. A secção Movimento e a lista de Componentes acima foram reescritas a partir do código tal como ficou, não da intenção original — a divergência (Blur Text previsto, texto estático entregue) fica registada como facto do build, não apagada.
